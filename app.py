@@ -202,11 +202,11 @@ with st.sidebar:
 st.markdown("""
 <div class="main-header">
     <h1>Nahid AI Pro Max</h1>
-    <p>⚡ World #1 Quantum Neural Matrix, Adobe Stock Certified & 100% Watermark Free</p>
+    <p>⚡ World #1 FLUX.1 Neural Engine, Adobe Stock Certified & 100% Watermark Free</p>
 </div>
 """, unsafe_allow_html=True)
 
-# Embedding Enhanced Ultra-Clear JS Engine with Advanced Canvas Processing
+# Embedding Enhanced Ultra-Clear JS Engine with Hugging Face FLUX.1 Backend
 studio_html_code = """
 <!DOCTYPE html>
 <html lang="en">
@@ -229,6 +229,13 @@ studio_html_code = """
             padding: 25px;
             box-shadow: 0 30px 70px rgba(0, 0, 0, 0.98);
         }
+        .token-group {
+            margin-bottom: 18px;
+            background: #0f172a;
+            border: 1px dashed #60a5fa;
+            padding: 12px;
+            border-radius: 12px;
+        }
         .controls-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -238,7 +245,7 @@ studio_html_code = """
         .form-group { margin-bottom: 18px; }
         label { display: block; color: #93c5fd; font-size: 12px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        select, textarea {
+        input[type="password"], select, textarea {
             width: 100%;
             background: #020617;
             border: 2px solid #334155;
@@ -250,7 +257,7 @@ studio_html_code = """
             transition: all 0.3s ease;
         }
         textarea { resize: vertical; min-height: 95px; }
-        select:focus, textarea:focus { border-color: #60a5fa; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+        input[type="password"]:focus, select:focus, textarea:focus { border-color: #60a5fa; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
         
         .btn-flex {
             display: flex;
@@ -378,13 +385,18 @@ studio_html_code = """
 <body>
 
     <div class="studio-card">
+        <div class="token-group">
+            <label for="hfTokenInput" style="color: #60a5fa;">🔑 Enter Hugging Face API Token (hf_...):</label>
+            <input type="password" id="hfTokenInput" placeholder="Paste your hf_... token here to unlock FLUX.1 Engine">
+        </div>
+
         <div class="controls-grid">
             <div class="form-group" style="margin-bottom:0;">
                 <label for="resolutionSelect">Resolution Scale:</label>
                 <select id="resolutionSelect">
-                    <option value="1920">Full HD (1920x1080)</option>
-                    <option value="3840">4K Ultra (3840x2160)</option>
-                    <option value="7680" selected>8K Supreme (7680x4320)</option>
+                    <option value="1024">HD Standard (1024x1024)</option>
+                    <option value="1280" selected>FLUX HD Ultra (1280x720)</option>
+                    <option value="1920">Full HD Max (1920x1080)</option>
                 </select>
             </div>
             <div class="form-group" style="margin-bottom:0;">
@@ -398,8 +410,8 @@ studio_html_code = """
             <div class="form-group" style="margin-bottom:0;">
                 <label for="formatSelect">File Format:</label>
                 <select id="formatSelect">
-                    <option value="jpeg" selected>JPG Image</option>
-                    <option value="png">PNG Image</option>
+                    <option value="png" selected>PNG Image (Best)</option>
+                    <option value="jpeg">JPG Image</option>
                     <option value="webp">WEBP Image</option>
                 </select>
             </div>
@@ -428,7 +440,7 @@ studio_html_code = """
 
         <div class="output-section">
             <div class="spinner" id="loadingSpinner"></div>
-            <div class="loading-text" id="loadingText">Synthesizing Ultra-Clear Matrix & Removing Imperfections... Please wait.</div>
+            <div class="loading-text" id="loadingText">Processing via Hugging Face FLUX.1 Engine... Please wait.</div>
             <img id="outputImage" class="result-image" alt="Generated AI Masterpiece">
             
             <div class="upscale-supreme-box" id="supremeUpscalePanel">
@@ -458,7 +470,7 @@ studio_html_code = """
                 </div>
             </div>
 
-            <a id="downloadLink" class="download-btn" download="nahid-ai-masterpiece.jpg">📥 Download Masterpiece</a>
+            <a id="downloadLink" class="download-btn" download="nahid-ai-masterpiece.png">📥 Download Masterpiece</a>
         </div>
     </div>
 
@@ -484,19 +496,17 @@ studio_html_code = """
             }
         }
 
-        // Advanced Unsharp Mask & Ultra Sharp Matrix Filter
+        // Advanced Sharpening Filter
         function applyUltraSharpProcessing(ctx, width, height) {
             try {
                 let imgData = ctx.getImageData(0, 0, width, height);
                 let data = imgData.data;
-                // High-End Micro-Sharpening Algorithm to prevent blur and noise
                 for (let i = 0; i < data.length; i += 4) {
                     let r = data[i], g = data[i+1], b = data[i+2];
                     
-                    // Contrast enhancement
-                    r = ((r - 128) * 1.08) + 128;
-                    g = ((g - 128) * 1.08) + 128;
-                    b = ((b - 128) * 1.08) + 128;
+                    r = ((r - 128) * 1.05) + 128;
+                    g = ((g - 128) * 1.05) + 128;
+                    b = ((b - 128) * 1.05) + 128;
 
                     data[i]   = Math.min(255, Math.max(0, r));
                     data[i+1] = Math.min(255, Math.max(0, g));
@@ -506,42 +516,18 @@ studio_html_code = """
             } catch(e) {}
         }
 
-        // Complete Watermark, Logo & Corner Artifact Eraser
-        function cleanWatermarksAndArtifacts(ctx, width, height) {
-            try {
-                // Erase Bottom Right Watermark Box
-                let boxW = Math.floor(width * 0.25);
-                let boxH = Math.floor(height * 0.08);
-                let startX = width - boxW - 5;
-                let startY = height - boxH - 5;
-
-                // Sample nearby clean background color
-                let sampleX = Math.max(5, startX - 20);
-                let sampleY = Math.max(5, startY - 20);
-                let pixelSample = ctx.getImageData(sampleX, sampleY, 1, 1).data;
-                
-                ctx.fillStyle = `rgb(${pixelSample[0]}, ${pixelSample[1]}, ${pixelSample[2]})`;
-                ctx.fillRect(startX, startY, boxW + 10, boxH + 10);
-            } catch(e) {
-                // Safe Fallback
-                let boxW = Math.floor(width * 0.25);
-                let boxH = Math.floor(height * 0.08);
-                ctx.fillStyle = "#020617";
-                ctx.fillRect(width - boxW - 5, height - boxH - 5, boxW + 10, boxH + 10);
+        async function generateWorldBestImage() {
+            let token = document.getElementById('hfTokenInput').value.trim();
+            if (!token) {
+                alert('🔑 Please enter your Hugging Face API Token (hf_...) first!');
+                return;
             }
-        }
 
-        function generateWorldBestImage() {
             let promptText = document.getElementById('promptInput').value.trim();
             if (!promptText) {
                 alert('Please enter a prompt in the text box!');
                 return;
             }
-
-            try {
-                let oldImg = document.getElementById('outputImage');
-                if (oldImg) { oldImg.src = ""; }
-            } catch(e) {}
 
             let spinner = document.getElementById('loadingSpinner');
             let text = document.getElementById('loadingText');
@@ -550,33 +536,25 @@ studio_html_code = """
             let upscalePanel = document.getElementById('supremeUpscalePanel');
 
             spinner.style.display = 'block';
+            text.innerText = "Connecting to Hugging Face FLUX.1 Engine... Please wait.";
             text.style.display = 'block';
             img.style.display = 'none';
             downloadBtn.style.display = 'none';
             upscalePanel.style.display = 'none';
 
-            let resVal = parseInt(document.getElementById('resolutionSelect').value);
             let aspectVal = document.getElementById('aspectSelect').value;
             let formatVal = document.getElementById('formatSelect').value;
             let styleVal = document.getElementById('styleSelect').value;
 
-            let targetWidth = resVal;
-            let targetHeight = resVal;
+            let targetWidth = 1024;
+            let targetHeight = 1024;
 
             if (aspectVal === "wide") {
-                targetHeight = Math.round(resVal * (9 / 16));
+                targetWidth = 1280;
+                targetHeight = 720;
             } else if (aspectVal === "tall") {
-                targetWidth = Math.round(resVal * (9 / 16));
-            }
-
-            let apiWidth = 3840;
-            let apiHeight = 2160;
-            if (aspectVal === "square") {
-                apiWidth = 3072;
-                apiHeight = 3072;
-            } else if (aspectVal === "tall") {
-                apiWidth = 2160;
-                apiHeight = 3840;
+                targetWidth = 720;
+                targetHeight = 1280;
             }
 
             let styleModifiers = "";
@@ -589,115 +567,75 @@ studio_html_code = """
             } else if (styleVal === "macro") {
                 styleModifiers = ", extreme macro details, sharp focus, pristine clarity, 8k resolution";
             } else {
-                styleModifiers = ", 8k raw dslr photo, ultra sharp, hyperrealistic, crystal clear focus, no blur, high quality";
+                styleModifiers = ", 8k raw photo, ultra sharp, hyperrealistic, crystal clear focus, no blur, high quality";
             }
 
-            // Anti-blur & Anti-watermark Prompt Filters
-            let antiBlurQualityEnhancers = styleModifiers + ", extremely clear background, sharp foreground, crisp focus, flawless texture";
-            let negativePromptParams = "&nologo=true&no-watermark=true&no-blur=true&private=true&enhance=true";
-            
-            let fullPrompt = encodeURIComponent(promptText + antiBlurQualityEnhancers);
-            let randomSeed = Math.floor(Math.random() * 999999999);
+            let fullPrompt = promptText + styleModifiers;
 
-            let primaryUrl = `https://image.pollinations.ai/prompt/${fullPrompt}?width=${apiWidth}&height=${apiHeight}${negativePromptParams}&seed=${randomSeed}`;
-            let backupUrl = `https://pollinations.ai/p/${fullPrompt}?width=${apiWidth}&height=${apiHeight}${negativePromptParams}&seed=${randomSeed}`;
+            try {
+                let response = await fetch("https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        inputs: fullPrompt,
+                        parameters: {
+                            width: targetWidth,
+                            height: targetHeight
+                        }
+                    })
+                });
 
-            let loadTimeout = setTimeout(function() {
-                if (spinner.style.display === 'block') {
+                if (response.status === 200) {
+                    let blob = await response.blob();
+                    let objectUrl = URL.createObjectURL(blob);
+
+                    let tempImage = new Image();
+                    tempImage.onload = function() {
+                        let canvas = document.createElement('canvas');
+                        let ctx = canvas.getContext('2d');
+                        canvas.width = targetWidth;
+                        canvas.height = targetHeight;
+
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
+
+                        ctx.drawImage(tempImage, 0, 0, canvas.width, canvas.height);
+                        applyUltraSharpProcessing(ctx, canvas.width, canvas.height);
+
+                        let mimeType = (formatVal === 'png') ? 'image/png' : (formatVal === 'webp' ? 'image/webp' : 'image/jpeg');
+                        let fileExt = (formatVal === 'jpeg') ? 'jpg' : formatVal;
+
+                        cachedMasterRawImage = tempImage;
+                        let finalImageUrl = canvas.toDataURL(mimeType, 1.0);
+
+                        img.src = finalImageUrl;
+                        downloadBtn.href = finalImageUrl;
+                        downloadBtn.download = `nahid-ai-flux-${targetWidth}x${targetHeight}.${fileExt}`;
+
+                        spinner.style.display = 'none';
+                        text.style.display = 'none';
+                        img.style.display = 'block';
+                        upscalePanel.style.display = 'block';
+                        downloadBtn.style.display = 'block';
+                    };
+                    tempImage.src = objectUrl;
+                } else if (response.status === 503) {
                     spinner.style.display = 'none';
                     text.style.display = 'none';
-                    alert('Server response timed out. Please try generating again.');
+                    alert('⏳ FLUX Model is loading on Hugging Face. Please wait 20-30 seconds and click Generate again!');
+                } else {
+                    spinner.style.display = 'none';
+                    text.style.display = 'none';
+                    alert(`❌ Error ${response.status}: Invalid Token or API limit reached. Please check your Hugging Face Token.`);
                 }
-            }, 60000);
-
-            let tempImage = new Image();
-            tempImage.crossOrigin = "anonymous";
-
-            tempImage.onload = function() {
-                clearTimeout(loadTimeout);
-                
-                let canvas = document.createElement('canvas');
-                let ctx = canvas.getContext('2d');
-                
-                canvas.width = targetWidth;
-                canvas.height = targetHeight;
-                
-                // Maximum Smooth Quality Scaling
-                ctx.imageSmoothingEnabled = true;
-                ctx.imageSmoothingQuality = 'high';
-                
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(tempImage, 0, 0, canvas.width, canvas.height);
-
-                applyUltraSharpProcessing(ctx, canvas.width, canvas.height);
-                cleanWatermarksAndArtifacts(ctx, canvas.width, canvas.height);
-
-                let mimeType = 'image/jpeg';
-                let fileExt = 'jpg';
-                if (formatVal === 'png') { mimeType = 'image/png'; fileExt = 'png'; }
-                else if (formatVal === 'webp') { mimeType = 'image/webp'; fileExt = 'webp'; }
-
-                cachedMasterRawImage = tempImage;
-                let finalImageUrl = canvas.toDataURL(mimeType, 1.0);
-
-                img.src = finalImageUrl;
-                downloadBtn.href = finalImageUrl;
-                downloadBtn.download = `nahid-ai-masterpiece-${targetWidth}x${targetHeight}.${fileExt}`;
-
+            } catch (err) {
                 spinner.style.display = 'none';
                 text.style.display = 'none';
-                img.style.display = 'block';
-                upscalePanel.style.display = 'block';
-                downloadBtn.style.display = 'block';
-            };
-
-            tempImage.onerror = function() {
-                let fallbackImage = new Image();
-                fallbackImage.crossOrigin = "anonymous";
-                
-                fallbackImage.onload = function() {
-                    clearTimeout(loadTimeout);
-                    let canvas = document.createElement('canvas');
-                    let ctx = canvas.getContext('2d');
-                    canvas.width = targetWidth;
-                    canvas.height = targetHeight;
-                    ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = 'high';
-
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.drawImage(fallbackImage, 0, 0, canvas.width, canvas.height);
-
-                    applyUltraSharpProcessing(ctx, canvas.width, canvas.height);
-                    cleanWatermarksAndArtifacts(ctx, canvas.width, canvas.height);
-
-                    let mimeType = (formatVal === 'png') ? 'image/png' : (formatVal === 'webp' ? 'image/webp' : 'image/jpeg');
-                    let fileExt = formatVal === 'jpeg' ? 'jpg' : formatVal;
-                    
-                    cachedMasterRawImage = fallbackImage;
-                    let finalImageUrl = canvas.toDataURL(mimeType, 1.0);
-
-                    img.src = finalImageUrl;
-                    downloadBtn.href = finalImageUrl;
-                    downloadBtn.download = `nahid-ai-masterpiece-${targetWidth}x${targetHeight}.${fileExt}`;
-
-                    spinner.style.display = 'none';
-                    text.style.display = 'none';
-                    img.style.display = 'block';
-                    upscalePanel.style.display = 'block';
-                    downloadBtn.style.display = 'block';
-                };
-
-                fallbackImage.onerror = function() {
-                    clearTimeout(loadTimeout);
-                    spinner.style.display = 'none';
-                    text.style.display = 'none';
-                    alert('Rendering failed. Please try generating again.');
-                };
-
-                fallbackImage.src = backupUrl;
-            };
-
-            tempImage.src = primaryUrl;
+                alert('❌ Network Error: Unable to connect to Hugging Face API.');
+            }
         }
 
         function executeSupremeUpscale() {
@@ -709,16 +647,9 @@ studio_html_code = """
             let multiplier = parseInt(document.getElementById('upscaleMultiplierSelect').value);
             let targetAspect = document.getElementById('upscaleAspectSelect').value;
             let formatVal = document.getElementById('formatSelect').value;
-            let resVal = parseInt(document.getElementById('resolutionSelect').value);
-            let aspectVal = document.getElementById('aspectSelect').value;
 
-            let baseWidth = resVal;
-            let baseHeight = resVal;
-            if (aspectVal === "wide") {
-                baseHeight = Math.round(resVal * (9 / 16));
-            } else if (aspectVal === "tall") {
-                baseWidth = Math.round(resVal * (9 / 16));
-            }
+            let baseWidth = cachedMasterRawImage.width;
+            let baseHeight = cachedMasterRawImage.height;
 
             let finalWidth = baseWidth * multiplier;
             let finalHeight = baseHeight * multiplier;
@@ -749,7 +680,6 @@ studio_html_code = """
                     canvas.width = finalWidth;
                     canvas.height = finalHeight;
 
-                    // High Precision Interpolation Scaling
                     ctx.imageSmoothingEnabled = true;
                     ctx.imageSmoothingQuality = 'high';
 
@@ -757,12 +687,9 @@ studio_html_code = """
                     ctx.drawImage(cachedMasterRawImage, 0, 0, canvas.width, canvas.height);
 
                     applyUltraSharpProcessing(ctx, canvas.width, canvas.height);
-                    cleanWatermarksAndArtifacts(ctx, canvas.width, canvas.height);
 
-                    let mimeType = 'image/jpeg';
-                    let fileExt = 'jpg';
-                    if (formatVal === 'png') { mimeType = 'image/png'; fileExt = 'png'; }
-                    else if (formatVal === 'webp') { mimeType = 'image/webp'; fileExt = 'webp'; }
+                    let mimeType = (formatVal === 'png') ? 'image/png' : (formatVal === 'webp' ? 'image/webp' : 'image/jpeg');
+                    let fileExt = (formatVal === 'jpeg') ? 'jpg' : formatVal;
 
                     let upscaledImageUrl = canvas.toDataURL(mimeType, 1.0);
 
@@ -772,21 +699,19 @@ studio_html_code = """
 
                     spinner.style.display = 'none';
                     text.style.display = 'none';
-                    text.innerText = 'Synthesizing Ultra-Clear Matrix & Removing Imperfections... Please wait.';
                     img.style.display = 'block';
                     downloadBtn.style.display = 'block';
-                    alert(`👑 Success: Image successfully upscaled to ${finalWidth}x${finalHeight} with crisp details and no watermarks!`);
+                    alert(`👑 Success: Image successfully upscaled to ${finalWidth}x${finalHeight} with FLUX HD clarity!`);
                 } catch (err) {
                     spinner.style.display = 'none';
                     text.style.display = 'none';
-                    text.innerText = 'Synthesizing Ultra-Clear Matrix & Removing Imperfections... Please wait.';
-                    alert('❌ Upscaling failed due to memory limit. Please try selecting a lower resolution scale.');
+                    alert('❌ Upscaling failed due to memory limit. Please select a lower multiplier.');
                 }
-            }, 700);
+            }, 500);
         }
     </script>
 </body>
 </html>
 """
 
-components.html(studio_html_code, height=1150, scrolling=True)
+components.html(studio_html_code, height=1200, scrolling=True)
